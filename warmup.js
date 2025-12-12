@@ -20,6 +20,7 @@ const students = [
     let result = {"Average Score":getAverageScore(students),
                     "Top Student":getTopStudent(students),
                     "Passing Students":getPassingStudents(students)};
+    console.log(result)
     return result;
     // TODO: call getAverageScore, getTopStudent, and getPassingStudents
     // TODO: log each result
@@ -85,7 +86,7 @@ const students = [
   // TODO 5: Call runAnalyzer() at the bottom
   // ===============================================
   
-  console.log(runAnalyzer(students));
+  runAnalyzer(students);
   
   // ===============================================
   // Example Output
