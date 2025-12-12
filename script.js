@@ -83,15 +83,30 @@ const CourseInfo = {
     // assignmentGroup is an Object {} the value of assignments is an Array of Objects with a due-at key
     //look at the submissions and see which submission is due and when it was turned in 
     let result ='hi mom';
-    // if (ag.assignments.due_at)
+    //first loop through ag to see which assignments are due
+    let dueAssignments = [];
+    for(let i = 0;i<ag.assignments.length;i++){
+    if (ag.assignments[i].due_at<"2024-01-01"){
+      dueAssignments.push(ag.assignments[i].id)
+    }
+    }
+    //then loop through submissions to see which scores to keep 
+    // loop through submissions
+    // for (let i = 0;i<submissions.length;i++){
+    //   //if the submission ID
+    //   if (submissions[i].assignment_id)
+    // }
 
     return result;
   }
   
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  
   console.log(result);
-  
+  //helper functions 
+  //
+
+
+
   // const result = [
   //   {
   //     id: 125,
