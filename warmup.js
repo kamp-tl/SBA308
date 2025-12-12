@@ -4,15 +4,11 @@
 
 // Starter data
 const students = [
-    { name: "Alice", score: 88 },
-    { name: "Ben", score: 72 },
-    { name: "Cara", score: 95 },
-    { name: "Alice", score: 88 },
-    { name: "Ben", score: 72 },
-    { name: "Cara", score: 95 },
-    { name: "Dan", score: 64 },
-    { name: "Johnny", score: 69}
-  ];
+    {name:"billy",score:71},
+    {name:'mark',score:69},
+    {name:'irina',score:80}
+
+];
   
   // ===============================================
   // TODO 1: Main function (runAnalyzer)
@@ -21,11 +17,14 @@ const students = [
   // ===============================================
   
   function runAnalyzer() {
+    try {
     let result = {"Average Score":getAverageScore(students),
                     "Top Student":getTopStudent(students),
                     "Passing Students":getPassingStudents(students)};
     console.log(result)
-    return result;
+    return result;}
+
+    catch(err) {console.error(`Error ${err.message}`)}
     // TODO: call getAverageScore, getTopStudent, and getPassingStudents
     // TODO: log each result
   }
@@ -39,6 +38,7 @@ const students = [
   
   function getAverageScore(studentsArray) {
     // TODO: calculate and return average score
+    if (studentsArray.length == 0) throw new Error("Array is empty");
     let totalScore = 0;
     for (let i = 0;i<studentsArray.length;i++){
         totalScore+=studentsArray[i].score
@@ -56,6 +56,7 @@ const students = [
   
   function getTopStudent(studentsArray) {
     // TODO: loop through students and return the top scorer
+    if (studentsArray.length == 0) throw new Error("Array is empty");
     let topStudent;
     let topScore = 0;
     for (let i = 0; i < studentsArray.length;i++){
@@ -75,6 +76,7 @@ const students = [
   
   function getPassingStudents(studentsArray) {
     // TODO: filter or loop and return passing students
+    if (studentsArray.length == 0) throw new Error("Array is empty");
     let passingStudents = [];
     for (let i = 0; i < studentsArray.length; i++){
         if(studentsArray[i].score >= 70){
@@ -90,7 +92,7 @@ const students = [
   // TODO 5: Call runAnalyzer() at the bottom
   // ===============================================
   
-  runAnalyzer(students);
+  runAnalyzer();
   
   // ===============================================
   // Example Output
@@ -104,7 +106,6 @@ const students = [
   // ===============================================
   // Implement error handling
 
-  
   
   
   
