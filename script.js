@@ -78,21 +78,13 @@ const CourseInfo = {
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
-    const result = [
-      {
-        id: 125,
-        avg: 0.985, // (47 + 150) / (50 + 150)
-        1: 0.94, // 47 / 50
-        2: 1.0 // 150 / 150
-      },
-      {
-        id: 132,
-        avg: 0.82, // (39 + 125) / (50 + 150)
-        1: 0.78, // 39 / 50
-        2: 0.833 // late: (140 - 15) / 150
-      }
-    ];
-  
+    //create a variable to store the result as an array of objects consisting of an id, average assignment score and each assignment score 
+    //first look at assignmentGroup and see what is due 
+    // assignmentGroup is an Object {} the value of assignments is an Array of Objects with a due-at key
+    //look at the submissions and see which submission is due and when it was turned in 
+    let result ='hi mom';
+    // if (ag.assignments.due_at)
+
     return result;
   }
   
@@ -100,3 +92,17 @@ const CourseInfo = {
   
   console.log(result);
   
+  // const result = [
+  //   {
+  //     id: 125,
+  //     avg: 0.985, // (47 + 150) / (50 + 150)
+  //     1: 0.94, // 47 / 50
+  //     2: 1.0 // 150 / 150
+  //   },
+  //   {
+  //     id: 132,
+  //     avg: 0.82, // (39 + 125) / (50 + 150)
+  //     1: 0.78, // 39 / 50
+  //     2: 0.833 // late: (140 - 15) / 150
+  //   }
+  // ];
