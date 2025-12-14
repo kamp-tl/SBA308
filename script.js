@@ -77,6 +77,12 @@ const CourseInfo = {
   ];
   
   function getLearnerData(course, ag, submissions) {
+    try {
+      if (course.id !== ag.course_id)
+    throw new Error("Assignment Group does not match course") }
+    catch (err){console.error(err.message)
+      return [];
+  }
     // here, we would process this data to achieve the desired result.
     //create a variable to store the result as an array of objects consisting of an id, average assignment score and each assignment score 
     //first look at assignmentGroup and see what is due 
