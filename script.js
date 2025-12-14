@@ -95,34 +95,47 @@ const CourseInfo = {
     //create an array of the learners who have submissions and add the newLearners 
     //then loop through submissions to see which scores to keep 
     // loop through submissions
-    
+    // create an array of objects of each unique learner to submit an assignment
     let learners = []
+    
     for (let sub of submissions){
+      let total = 0;
       //if the submission ID is included in dueAssignments 
       if (!dueAssignments.includes(sub.assignment_id)){
         continue;
       }
-      
+      //learner returns true or false based off if the current sub.learner_id exists in learners
       let learner = learners.find(l => l.id === sub.learner_id)
 
-      if (!learner) {
+      if (!learner) { //if new learner submission, create a learner obj and push into learners 
         learner = {id:sub.learner_id}
         learners.push(learner)
         
       }
    
-        learner[sub.assignment_id] = sub.submission.score
+        learner[(sub.assignment_id)] = sub.submission.score
+
+      let assignments = Object.keys(learner) //creates an assignments array consisting of learner keys
+      .filter(key => !isNaN(key)) //filters out the keys that are not numbers (id)
+      .map(key => learner[key]) //replaces the keys with their values 
+
+      total = assignments.reduce((a,b) => a+b,0) //adds up all values and saves in total
+
+      learner.avg = total / assignments.length;  // add an avg property 
       
     }
-  
-    return learners;
-  
-}
+    let orderedLearners = learners.map(learner => {
+      let {id, avg, ...assignments } = learner;
+      return {id, avg, ...assignments};
+    });
+    
+      
+    return orderedLearners;
+  }
   
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   console.log(result);
-  //helper functions 
-  //
+  
 
 
 
