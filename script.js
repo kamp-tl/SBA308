@@ -82,21 +82,41 @@ const CourseInfo = {
     //first look at assignmentGroup and see what is due 
     // assignmentGroup is an Object {} the value of assignments is an Array of Objects with a due-at key
     //look at the submissions and see which submission is due and when it was turned in 
-    let result ='hi mom';
+    let result =['hi mom'];
     //first loop through ag to see which assignments are due
     let dueAssignments = [];
     for(let i = 0;i<ag.assignments.length;i++){
-    if (ag.assignments[i].due_at<"2024-01-01"){
+    if (ag.assignments[i].due_at<"2025-01-01"){
       dueAssignments.push(ag.assignments[i].id)
     }
     }
+    //loop through the submissions, when you encounter a new submissions[i].learner_id create a new object 
+    //with an initial key:value of id:submissions[i].learner_id 
+    //create an array of the learners who have submissions and add the newLearners 
     //then loop through submissions to see which scores to keep 
     // loop through submissions
-    // for (let i = 0;i<submissions.length;i++){
-    //   //if the submission ID
-    //   if (submissions[i].assignment_id)
-    // }
+    let submittedUsers = [];
 
+    for (let i = 0;i<submissions.length;i++){
+      let sub = submissions[i];
+      //if the submission ID is included in dueAssignments 
+      if (dueAssignments.includes(sub.assignment_id)){
+        if (!submittedUsers.includes(sub.learner_id)){
+        let newLearner = {};
+        newLearner.id = sub.learner_id;
+        newLearner.scores = [];
+        newLearner.scores.push(sub.submission.score)
+        submittedUsers.push(sub.learner_id)
+        console.log(newLearner)
+        }
+        else {
+        
+
+        }
+      }
+    }
+    
+    console.log(submittedUsers)
     return result;
   }
   
