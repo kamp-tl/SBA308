@@ -120,7 +120,6 @@ function getLearnerData(course, ag, submissions) {
       //if no learner submission in learners, create a learner obj and push into learners
       learner = {
         id: sub.learner_id,
-        assignments: [],
         pointsEarned: 0,
         pointsPossible: 0,
       };
