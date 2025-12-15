@@ -77,32 +77,28 @@ const LearnerSubmissions = [
 ];
 
 function getLearnerData(course, ag, submissions) {
-  //error handling to check if the CourseInfo aligns with the assignmentGroup
-  try {
+  
+  try { //error handling to check if the CourseInfo aligns with the assignmentGroup
     if (course.id !== ag.course_id)
       throw new Error("Assignment Group does not match course!");
   } catch (err) {
     console.error(`❌ ERROR ❌ ${err.message}`);
     return [];
   }
-  //first loop through ag to see which assignments are due
+
   const dueAssignments = []; //creates an empty array to store the dueAssignments
-  for (let a of ag.assignments) { //loop through the assignmentGroup and if they're due
-    if (a.due_at < "2025-01-01") {
-      dueAssignments.push(a.id); //if the string comparison says the assignment is due before 2025 then push assignments[i].id into dueAssignments
+  
+  for (let a of ag.assignments) { //loop through the assignmentGroup and check if they're due
+    if (a.due_at < "2025-01-01") { //if the string comparison says the assignment is due before 2025 then push the assignment id into dueAssignments
+      dueAssignments.push(a.id); 
     }
   }
 
-  //loop through the submissions, when you encounter a new submissions[i].learner_id create a new object
-  //with an initial key:value of id:sub.learner_id, an array of assignments, pointsEarned and pointsPossible
-  //create an array of the learners who have submissions and add the newLearners
-  //then loop through submissions to see which scores to keep
-  // loop through submissions
-  let learners = [];// an array of objects of each unique learner to submit an assignment
-  //check if the submission is due
+  const learners = [];// an array of objects to hold each unique learner to submit an assignment
+  
   for (let sub of submissions) {//main loop, this loops through the submissions and parses 
-   
-   //if the submission is not due then move on
+
+    //if the submission is not due then move on
     if (!dueAssignments.includes(sub.assignment_id)) {continue;} 
 
     //learner is the object of each learner that has made a submission
@@ -114,7 +110,8 @@ function getLearnerData(course, ag, submissions) {
         pointsEarned: 0,
         pointsPossible: 0,
       };
-    learners.push(learner);}
+    learners.push(learner);
+    }
 
     //assignment is the element in assignmentGroup with the same id as the submission
     let assignment = ag.assignments.find((a) => a.id === sub.assignment_id); 
@@ -123,28 +120,24 @@ function getLearnerData(course, ag, submissions) {
     if (sub.submission.submitted_at > assignment.due_at) { //late penalty
       score -= possible * 0.1; 
     }
+
     //creates and sets a key of the assignment_id to a 3 digit float of the score out of 100
-    learner['Assignment ' + sub.assignment_id] = 'Score: ' + (parseFloat((score / possible).toFixed(3))*100)+"/100"; 
-    //the score by percentage is saved by id as a string
+    learner[`Assignment ${sub.assignment_id}`] = `Score: ${score}/${possible} - ${(parseFloat((score / possible).toFixed(3))*100)}%`;
+
     if (sub.submission.submitted_at > assignment.due_at) {
-      learner['Assignment ' + sub.assignment_id] = learner['Assignment ' + sub.assignment_id]+" late"; 
+      learner[`Assignment ${sub.assignment_id}`] = learner[`Assignment ${sub.assignment_id}`] + " late"
     }
     learner.pointsEarned += score; //need these values for the average 
     learner.pointsPossible += possible;
     //console.log(`The score of Assignment ${sub.assignment_id} from Learner ${sub.learner_id} is ${score} out of ${possible}`);
     // learner[(sub.assignment_id)] = sub.submission.score
   }
+
   for (let learner of learners){ //loops through the array of objects of learners that submitted
-      learner['Average Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100);
+      learner['Average Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100)+ "%";
       delete learner.pointsEarned; //the values are needed to find the average but deleting them cleans up the output
       delete learner.pointsPossible;
-    }
-
-  // let orderedLearners = learners.map((learner) => {
-  //   let { id, avg, ...assignments } = learner;
-    
-  //   return { id, avg, ...assignments };
-  // });
+  }
 
   return learners;
 }
