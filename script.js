@@ -89,7 +89,7 @@ const LearnerSubmissions = [
   //   learner_id: 125,
   //   assignment_id: 4,
   //   submission: {
-  //     submitted_at: "2023-03-07",
+  //     submitted_at: "2023-01-25",
   //     score: 240,
   //   },
   // },{
@@ -137,7 +137,7 @@ function getLearnerData(course, ag, submissions) {
     //learner is the object of each learner that has made a submission
     let learner = learners.find((l) => l.id === sub.learner_id);
 
-    if (!learner) {//if no matching learner has submitted, create an empty learner TEMPLATE and push into learners[]
+    if (!learner) {//if no submissions or no matching learner has submitted, create an empty learner TEMPLATE and push into learners[]
       learner = {
         id: sub.learner_id,
         pointsEarned: 0, //these two variables are needed for the point totals and average
