@@ -18,6 +18,18 @@ const AssignmentGroup = {
       points_possible: 50,
     },
     {
+      id: 4,
+      name: "4",
+      due_at: "2023-01-25",
+      points_possible: 250,
+    },
+    {
+      id: 5,
+      name: "5",
+      due_at: "2023-01-25",
+      points_possible: 450,
+    },
+    {
       id: 2,
       name: "Write a Function",
       due_at: "2023-02-27",
@@ -73,6 +85,27 @@ const LearnerSubmissions = [
       submitted_at: "2023-03-07",
       score: 140,
     },
+  // },{
+  //   learner_id: 125,
+  //   assignment_id: 4,
+  //   submission: {
+  //     submitted_at: "2023-03-07",
+  //     score: 240,
+  //   },
+  // },{
+  //   learner_id: 132,
+  //   assignment_id: 4,
+  //   submission: {
+  //     submitted_at: "2023-01-24",
+  //     score: 180,
+  //   },
+  // },{
+  //   learner_id: 132,
+  //   assignment_id: 5,
+  //   submission: {
+  //     submitted_at: "2023-03-07",
+  //     score: 440,
+  //   },
   },
 ];
 
@@ -121,21 +154,20 @@ function getLearnerData(course, ag, submissions) {
       score -= possible * 0.1; 
     }
 
-    //creates and sets a key of the assignment_id to a 3 digit float of the score out of 100
+    //creates and sets a key of the assignment_id to the score,points_possible, a 3 digit float of the score percentage
     learner[`Assignment ${sub.assignment_id}`] = `Score: ${score}/${possible} - ${(parseFloat((score / possible).toFixed(3))*100)}%`;
 
+    //if submitted after due date then add late string 
     if (sub.submission.submitted_at > assignment.due_at) {
       learner[`Assignment ${sub.assignment_id}`] = learner[`Assignment ${sub.assignment_id}`] + " late"
     }
     learner.pointsEarned += score; //need these values for the average 
-    learner.pointsPossible += possible;
-    //console.log(`The score of Assignment ${sub.assignment_id} from Learner ${sub.learner_id} is ${score} out of ${possible}`);
-    // learner[(sub.assignment_id)] = sub.submission.score
+    learner.pointsPossible += possible; //they need to be in the main loop to collect from multiple assignments 
   }
 
   for (let learner of learners){ //loops through the array of objects of learners that submitted
-      learner['Average Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100)+ "%";
-      delete learner.pointsEarned; //the values are needed to find the average but deleting them cleans up the output
+      learner['Total Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100)+ "%";
+      delete learner.pointsEarned; //the values are already displayed 
       delete learner.pointsPossible;
   }
 
