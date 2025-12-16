@@ -116,13 +116,13 @@ function getLearnerData(course, ag, submissions) {
       throw new Error("Assignment Group does not match course!");
   } catch (err) {
     console.error(`❌ ERROR ❌ ${err.message}`);
-    return [];
+    return '';
   }
 
   const dueAssignments = []; //creates an empty array to store the dueAssignments
   
   for (let a of ag.assignments) { //loop through the assignmentGroup and check if they're due
-    if (a.due_at < "2025-01-01") { //if the string comparison says the assignment is due before 2025 then push the assignment id into dueAssignments
+    if (a.due_at < "2025-01-01") { //if the assignment is due before 2025 then push the assignment id into dueAssignments
       dueAssignments.push(a.id); 
     }
   }
@@ -140,35 +140,36 @@ function getLearnerData(course, ag, submissions) {
     if (!learner) {//if no matching learner has submitted, create an empty learner TEMPLATE and push into learners[]
       learner = {
         id: sub.learner_id,
-        pointsEarned: 0,
-        pointsPossible: 0,
+        pointsEarned: 0, //these two variables are needed for the point totals and average
+        pointsPossible: 0, //they are in the learner block so they can add multiple assignments 
       };
     learners.push(learner);
     }
 
     //assignment is the element in assignmentGroup with the same id as the submission
-    let assignment = ag.assignments.find((a) => a.id === sub.assignment_id); 
-    let possible = assignment.points_possible;
+    const assignment = ag.assignments.find((a) => a.id === sub.assignment_id); 
+    const possible = assignment.points_possible;
     let score = sub.submission.score;
     if (sub.submission.submitted_at > assignment.due_at) { //late penalty
       score -= possible * 0.1; 
     }
 
     //creates and sets a key of the assignment_id to the score,points_possible, a 3 digit float of the score percentage
-    learner[`Assignment ${sub.assignment_id}`] = `Score: ${score}/${possible} - ${(parseFloat((score / possible).toFixed(3))*100)}%`;
+    learner[`Assignment ${sub.assignment_id}`] = `Score: ${score} points/ ${possible} points - ${(parseFloat((score / possible).toFixed(3))*100)}%`;
 
     //if submitted after due date then add late string 
     if (sub.submission.submitted_at > assignment.due_at) {
       learner[`Assignment ${sub.assignment_id}`] = learner[`Assignment ${sub.assignment_id}`] + " late"
     }
-    learner.pointsEarned += score; //need these values for the average 
+    learner.pointsEarned += score; //the score isn't saved until its added into learner which gets pushed out of the loop into learners[]
     learner.pointsPossible += possible; //they need to be in the main loop to collect from multiple assignments 
   }
 
-  for (let learner of learners){ //loops through the array of objects of learners that submitted
-      learner['Total Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100)+ "%";
-      delete learner.pointsEarned; //the values are already displayed 
-      delete learner.pointsPossible;
+  for (let i = 0; i < learners.length;i++){ //loops through the array of learners that have submitted also a different type of loop
+      let learner = learners[i];
+      learner['Total Grade'] = parseFloat((learner.pointsEarned / learner.pointsPossible).toFixed(3) * 100)+ "%"; 
+      delete learner.pointsEarned; //the related values are already displayed 
+      delete learner.pointsPossible; //deleted for readability
   }
 
   return learners;
